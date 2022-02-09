@@ -1,3 +1,20 @@
 h1{
     color:tomato;
 }
+.gameboard{
+    display: grid;
+    grid-template: 50px 50px 50px/50px 50px 50px;
+    gap:10px;
+    width:fit-content;
+    margin: auto;
+}
+.gameboard >div{
+    background-color: rgb(42, 255, 255);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.gameboard >div:hover{
+    background-color: rgb(34, 123, 123);
+}
