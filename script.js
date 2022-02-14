@@ -255,8 +255,8 @@ const placeSymbol= (currentState) =>{
 }
 
    const normalDifficulty = ()=>{
-       //let currentState = Board.getBoard();
-       //placeSymbol(currentState);
+       let currentState = Board.getBoard();
+       placeSymbol(currentState);
    }
    const impposibleDifficulty = ()=>{
       
