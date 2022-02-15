@@ -355,7 +355,7 @@ const placeSymbol= (currentState) =>{
 };
 const player1 = player('Bob','X');
 const player2 = player('Jim','O');
-const computer = playerComputer('Impossible');
+const computer = playerComputer('Normal');
 
 //console.log(computer.minMax(['O',' ','O',' ','X','X','X',' ','O']))
 //console.table(computer.createTree(['O',' ','O',' ','X','X','X',' ','O'],'O',-1));
