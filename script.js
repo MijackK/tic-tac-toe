@@ -1,9 +1,10 @@
-
 const Board = (() => {
     let symbol='X';
+    
 
     const gridElements= document.querySelector('.gameboard').children;
     let gridAssignment = [' ',' ',' ',' ',' ',' ',' ',' ',' '];
+    
 
     const getBoard = () =>{
         return gridAssignment
@@ -34,7 +35,7 @@ const Board = (() => {
         let reversedGrid = gridAssignment;
         reversedGrid = reversedGrid.slice().reverse().join('');
         const winPattern1 = /xxx|ooo/i;
-        const extendedCondition1 =[0,3,6].includes(stringGrid.search(winPattern1)) | [0,3,6].includes(reversedGrid.search(winPattern1));
+        const extendedCondition1 =[0,3,6].includes(stringGrid.search(winPattern1)) || [0,3,6].includes(reversedGrid.search(winPattern1));
         const winPattern2 = /x.{2}x.{2}x|o.{2}o.{2}o/i;
         const winPattern3=/x.{3}x.{3}x|o.{3}o.{3}o/i;
         const winPattern4 =/.{2}x.x.x|.{2}o.o.o/i;
@@ -99,18 +100,99 @@ const player = (name,symbol) =>{
 const playerComputer = (difficulty) =>{
   let currentPosition ;
   let noWin=[];
-  const prototype = player('computer','#')
-  const possibleWin1 = /xx /i;
-  const possibleWin1_1 = / xx/i;
-  const possibleWin1_2 =/x x/i;
-  const possibleWin2 = /x.{2}x.{2} /i;
-  const possibleWin2_1 = / .{2}x.{2}x/i;
-  const possibleWin2_2 = /x.{2} .{2}x/i;
-  const possibleWin3 = /x.{3}x.{3} /i;
-  const possibleWin3_1 = / .{3}x.{3}x/i;
-  const possibleWin3_2 = /.{2}x.x. /i;
-  const possibleWin3_3 = /.{2} .x.x/i; // triggers if there is an x in box 6 & 7 and box 4 is empty.
+  const prototype = player('computer','#');
+  let parentID = 1;
 
+  //code for impossible difficulty
+  const getEmpty = (gamestate) =>{
+      let empty =[];
+     for(let i=0; i<gamestate.length; i++){
+         if(gamestate[i]==' '){
+             empty.push(i);
+         }
+     }
+     return empty;
+
+  }
+  const generateID = () =>{
+      return parentID++
+
+}
+  const nodeFactory= (parentNode,gamestate,depth,index,value,ID) => {
+
+    return{parentNode,gamestate,depth,index,value,ID};
+  }
+  const createTree = (currentState,symbol,parentIndex) =>{
+      //let depth = currentState.join('').match(/ /g).length;
+      //let root = nodeFactory([],0,currentState,0,'')
+      let nodeTree = [];
+      let empty=getEmpty(currentState);
+      let node;  
+    
+
+      for( let i=0; i < empty.length; i++){
+          let gamestate = currentState.slice();
+          gamestate[empty[i]] = symbol
+          node = nodeFactory(parentIndex,gamestate,empty.length,empty[i],assignValue(gamestate,symbol,empty.length),generateID())
+          nodeTree.push(node);
+          if(/ /.test(gamestate.join('')) && [0].includes(assignValue(gamestate,symbol,empty.length)) == true ){
+              let childNodes = createTree(gamestate,symbol=='X'?'O':'X',node.ID);
+              nodeTree =nodeTree.concat(childNodes);
+              //experimental code
+              let filtered = nodeTree.filter(node1 => node1.parentNode == node.ID);
+              if(symbol == 'X'){
+                
+                node.value = filtered.length == 1? filtered[0].value : filtered.reduce((a,b)=>a.value > b.value?a:b).value;
+              }
+              else{
+                node.value = filtered.length == 1 ? filtered[0].value :filtered.reduce((a,b)=>a.value < b.value?a:b).value;
+              }
+          }
+      }
+      return nodeTree;
+  }
+  const assignValue = (state,symbol,depth) =>{
+    let stringGrid = state.join('');
+    let reversedGrid = state;
+    reversedGrid = reversedGrid.slice().reverse().join('');
+    const winPattern1 = /xxx|ooo/i;
+    const extendedCondition1 =[0,3,6].includes(stringGrid.search(winPattern1)) || [0,3,6].includes(reversedGrid.search(winPattern1));
+    const winPattern2 = /x.{2}x.{2}x|o.{2}o.{2}o/i;
+    const winPattern3=/x.{3}x.{3}x|o.{3}o.{3}o/i;
+    const winPattern4 =/.{2}x.x.x|.{2}o.o.o/i;
+    const extenderCondition2 = [0].includes(stringGrid.search(winPattern4))
+
+    if(winPattern1.test(stringGrid) && extendedCondition1){
+       
+        return symbol == 'X'? (-10-depth):(10+depth)
+    }
+    if( winPattern2.test(stringGrid)){
+
+        return symbol == 'X'? (-10-depth):(10+depth)
+    }
+    if( winPattern3.test(stringGrid)){
+    
+        return symbol == 'X'? (-10-depth):(10+depth)
+    }
+    if(winPattern4.test(stringGrid) && extenderCondition2){
+     
+        return symbol == 'X'? (-10-depth):(10+depth)
+    }
+
+    return 0;
+  }
+
+  const minMax = (currentState) =>{
+      let nodeTree = createTree(currentState,'O',-1);
+      let depth = getEmpty(currentState).length;
+      let indexValue = nodeTree.filter(node => node.depth == depth).reduce((a,b)=>a.value > b.value?a:b).index
+
+      return indexValue +1;
+   
+  }
+
+ 
+  // code for normal difficulty
   const makeChoice = () =>{
        switch(difficulty){
            case 'Normal':
@@ -118,11 +200,21 @@ const playerComputer = (difficulty) =>{
                normalDifficulty();
                break;
             case 'Impossible':
-                Board.addSymbol(impposibleDifficulty);
+                impposibleDifficulty();
                 break;
        }
    }
   const blockOrNot =(currentState) =>{
+    const possibleWin1 = /xx /i;
+    const possibleWin1_1 = / xx/i;
+    const possibleWin1_2 =/x x/i;
+    const possibleWin2 = /x.{2}x.{2} /i;
+    const possibleWin2_1 = / .{2}x.{2}x/i;
+    const possibleWin2_2 = /x.{2} .{2}x/i;
+    const possibleWin3 = /x.{3}x.{3} /i;
+    const possibleWin3_1 = / .{3}x.{3}x/i;
+    const possibleWin3_2 = /.{2}x.x. /i;
+    const possibleWin3_3 = /.{2} .x.x/i; // triggers if there is an x in box 6 & 7 and box 4 is empty.
     const extendedWin1 = [0,3,6].includes(currentState.search(possibleWin1));
     const extendedWin1_1 = [2,5,8].includes(currentState.search(possibleWin1_1)+2);
     const extendedWin1_2 = [0,3,6].includes(currentState.search(possibleWin1_2));
@@ -187,8 +279,6 @@ const putSymbol = (currentState,placements,index) => {
             Board.addSymbol(placements[i]);
             return index;
         }
-        
-
         if(currentState[placements[placeholder]-1] == " "  && currentState[placements[i]-1]== " " ){
             if( blockOrNot(boardString)){
             return index;
@@ -201,7 +291,6 @@ const putSymbol = (currentState,placements,index) => {
     if( blockOrNot(boardString)){
         return index;
     }
-
     return getRNG(currentState,noWin);
 }
 
@@ -251,23 +340,25 @@ const placeSymbol= (currentState) =>{
             currentPosition = putSymbol(currentState,[7,8,5,1,6,3],currentPosition)
             break
     }  
-   
 }
-
    const normalDifficulty = ()=>{
        let currentState = Board.getBoard();
        placeSymbol(currentState);
    }
    const impposibleDifficulty = ()=>{
-      
+   let currentState = Board.getBoard();
+   Board.addSymbol( minMax(currentState));
+   
    }
-   return {makeChoice, prototype}
+   return {makeChoice, prototype, minMax, createTree}
  
 };
-
 const player1 = player('Bob','X');
 const player2 = player('Jim','O');
-const computer = playerComputer('Normal');
+const computer = playerComputer('Impossible');
 
-
-
+//console.log(computer.minMax(['O',' ','O',' ','X','X','X',' ','O']))
+//console.table(computer.createTree(['O',' ','O',' ','X','X','X',' ','O'],'O',-1));
+//console.log(computer.minMax(['O',' ','O',' ','X','X','X',' ','O']));
+//let nodeTree =computer.createTree(['O','X',' ',' ',' ',' ',' ','X',' '],'O',-1)
+//console.table(nodeTree.filter(node => node.depth == 5));
