@@ -12,11 +12,11 @@ const Board = (() => {
     const endGame= () => {
         switch(symbol){
             case 'X':
-                player1.wins +=1;
+                gameController.player1.wins +=1;
             case 'O':
-                player2.wins +=1
+                gameController.opponent.prototype.wins +=1
         }
-        alert(symbol=='X'? `${player1.name} wins, rounds won ${player1.wins}`:`${player2.name} wins, rounds won ${player2.wins}`);
+        alert(symbol=='X'? `${gameController.player1.name} wins, rounds won ${gameController.player1.wins}`:`${gameController.opponent.prototype.name} wins, rounds won ${gameController.opponent.prototype.wins}`);
         resetGame();
         symbol='X';
 
@@ -30,7 +30,6 @@ const Board = (() => {
     }
 
     const checkWin = () =>{
-        
         let stringGrid = gridAssignment.join('');
         let reversedGrid = gridAssignment;
         reversedGrid = reversedGrid.slice().reverse().join('');
@@ -65,8 +64,8 @@ const Board = (() => {
             return
         }
         symbol = symbol=='X'?'O':'X';
-        if(symbol=='O'){
-        computer.makeChoice();
+        if(symbol=='O' && [1,2].includes(gameController.galleryIndex)){
+        gameController.opponent.makeChoice();
         }
     }
 
@@ -75,8 +74,12 @@ const Board = (() => {
         if(gridAssignment[index-1] != ' '){
             return   
         }
-
-       gridElements[index-1].textContent= symbol=='X'?player1.symbol:player2.symbol;;
+       //gridElements[index-1].textContent= symbol=='X'?player1.symbol:player2.symbol; // code for custom icons.
+       gridElements[index-1].innerHTML= symbol=='X'?`<div class="xsymbol">
+       <div style="left:15px"></div>
+       <div style="transform:rotate(-95deg); top:4px"> </div>
+       </div> `:'<div class="osymbol"></div>';
+       
        gridAssignment[index-1]=symbol;
        checkWin();
     }
@@ -128,7 +131,6 @@ const playerComputer = (difficulty) =>{
       let nodeTree = [];
       let empty=getEmpty(currentState);
       let node;  
-    
 
       for( let i=0; i < empty.length; i++){
           let gamestate = currentState.slice();
@@ -346,16 +348,105 @@ const placeSymbol= (currentState) =>{
        placeSymbol(currentState);
    }
    const impposibleDifficulty = ()=>{
-   let currentState = Board.getBoard();
+  let currentState = Board.getBoard();
    Board.addSymbol( minMax(currentState));
    
    }
-   return {makeChoice, prototype, minMax, createTree}
+   return {makeChoice, prototype}
  
 };
-const player1 = player('Bob','X');
-const player2 = player('Jim','O');
-const computer = playerComputer('Normal');
+
+const gameController = (() =>{
+    const gameContainer=document.querySelector('.game-container');
+    const menuWrapper =document.querySelector('.menu-wrapper');
+    const gameMenu = document.querySelector('.menu');
+    const startBtn = document.querySelector('#start-btn');
+    const arrowUp = document.querySelector('#arrow-up');
+    const arrowDown = document.querySelector('#arrow-down');
+    const Title = document.querySelector('#p2-title');
+    const Footer =document.querySelector('#footer');
+    const linkArray =['#p2-img1','#p2-img2','#p2-img3'];
+    let galleryIndex = 0;
+    let player1 = player('Bob','X');
+    let opponent;
+
+    const goUp= () =>{
+        if(galleryIndex == 0 ){
+            galleryIndex =2;
+            arrowDown.setAttribute('href',linkArray[0]);
+            Title.textContent="Unbeatable(AI)";
+           setTimeout( () => arrowUp.setAttribute('href',linkArray[1]),100);
+           return
+        }
+       
+        if(galleryIndex == 2){
+            arrowDown.setAttribute('href',linkArray[2]);
+            Title.textContent="Normal( AI )";
+            setTimeout( () => arrowUp.setAttribute('href',linkArray[0]),100)
+
+        }
+        if(galleryIndex ==1){
+            arrowDown.setAttribute('href',linkArray[1]);
+            Title.textContent="Human Player";
+            setTimeout( () => arrowUp.setAttribute('href',linkArray[2]),100)
+        }
+        galleryIndex = galleryIndex -1;
+          
+    }
+    const goDown = () =>{
+        if(galleryIndex == 2){
+            galleryIndex =0;
+            arrowUp.setAttribute('href',linkArray[2]);
+            Title.textContent="Human Player";
+            setTimeout(() => arrowDown.setAttribute('href',linkArray[1]),100);
+            return
+        }
+        if(galleryIndex == 0){
+            arrowUp.setAttribute('href',linkArray[0]);
+            Title.textContent="Normal( AI )";
+            setTimeout(() => arrowDown.setAttribute('href',linkArray[2]),100)
+
+        }
+        if(galleryIndex == 1){
+            arrowUp.setAttribute('href',linkArray[1]);
+            Title.textContent="Unbeatable( AI )";
+            setTimeout(() => arrowDown.setAttribute('href',linkArray[0]),100)
+
+        }
+            galleryIndex = galleryIndex +1;
+    }
+  
+
+    const intializegame= () =>{
+        switch(galleryIndex){
+            case 0:
+                gameController.opponent = player('Jim','O');
+                break;
+            case 1:
+                gameController.opponent = playerComputer('Normal');
+                break;
+            case 2:
+                gameController.opponent = playerComputer('Impossible');
+                break;
+        }
+        menuWrapper.style.display='none';
+        gameContainer.style.filter='blur(0px)';
+        Footer.style.filter='blur(0px)';
+        gameController.galleryIndex = galleryIndex;
+
+    }
+    const arrowEvents = (() =>{
+        arrowUp.addEventListener('click',goUp);
+        arrowDown.addEventListener('click',goDown);
+        startBtn.addEventListener('click',intializegame)
+    })()
+    return {galleryIndex,opponent,player1}
+})();
+
+
+//const player1 = player('Bob','X');
+//const player2 = player('Jim','O');
+//const computer = playerComputer('Impossible');
 
 //console.log(computer.minMax(['O',' ','O',' ','X','X','X',' ','O']))
 //console.table(computer.createTree(['O',' ','O',' ','X','X','X',' ','O'],'O',-1));
