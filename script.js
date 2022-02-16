@@ -367,7 +367,7 @@ const gameController = (() =>{
     const Footer =document.querySelector('#footer');
     const linkArray =['#p2-img1','#p2-img2','#p2-img3'];
     let galleryIndex = 0;
-    let player1 = player('Bob','X');
+    let player1 = player('Player1','X');
     let opponent;
 
     const goUp= () =>{
@@ -420,7 +420,7 @@ const gameController = (() =>{
     const intializegame= () =>{
         switch(galleryIndex){
             case 0:
-                gameController.opponent = player('Jim','O');
+                gameController.opponent = player('Player2','O');
                 break;
             case 1:
                 gameController.opponent = playerComputer('Normal');

@@ -230,4 +230,7 @@ footer >a:hover{
   .gameboard{
     grid-template: 100px 100px 100px/100px 100px 100px;
   }
+  .choice .choice1{
+      max-height: 169px;
+  }
   }
