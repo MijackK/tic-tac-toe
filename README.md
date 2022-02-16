@@ -9,3 +9,7 @@
 </ul>
 
 <h2> ScreenShots </h2>
+
+
+![Art sample](https://github.com/MijackK/Etch-a-Sketch/blob/main/art1.PNG)
+![Art sample](https://github.com/MijackK/Etch-a-Sketch/blob/main/art2.PNG)
