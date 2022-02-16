@@ -1,7 +1,7 @@
 <h2> Tic-Tac-Toe </h2>
 <h2> Live: https://mk-tictactoe.netlify.app/ </h2>
 
-<h3> Modes </h3>
+<h2> Game Modes </h2>
 <ul>
   <li> Player vs Player </li> 
   <li> Player vs computer(Normal ai) </li>
