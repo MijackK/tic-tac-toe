@@ -14,9 +14,9 @@ const Board = (() => {
             case 'X':
                 gameController.player1.wins +=1;
             case 'O':
-                gameController.opponent.prototype.wins +=1
+                gameController.opponent.wins +=1
         }
-        alert(symbol=='X'? `${gameController.player1.name} wins, rounds won ${gameController.player1.wins}`:`${gameController.opponent.prototype.name} wins, rounds won ${gameController.opponent.prototype.wins}`);
+        alert(symbol=='X'? `${gameController.player1.name} wins, rounds won ${gameController.player1.wins}`:`${gameController.opponent.name} wins, rounds won ${gameController.opponent.wins}`);
         resetGame();
         symbol='X';
 
@@ -28,7 +28,6 @@ const Board = (() => {
             element.textContent='';
         }
     }
-
     const checkWin = () =>{
         let stringGrid = gridAssignment.join('');
         let reversedGrid = gridAssignment;
@@ -78,8 +77,7 @@ const Board = (() => {
        gridElements[index-1].innerHTML= symbol=='X'?`<div class="xsymbol">
        <div style="left:15px"></div>
        <div style="transform:rotate(-95deg); top:4px"> </div>
-       </div> `:'<div class="osymbol"></div>';
-       
+       </div> `:'<div class="osymbol"></div>'; 
        gridAssignment[index-1]=symbol;
        checkWin();
     }
@@ -90,14 +88,12 @@ const Board = (() => {
         }
      
     })();
-    return {addSymbol,getBoard}
- 
-})();
 
+    return {addSymbol,getBoard}
+})();
 
 const player = (name,symbol) =>{
     let wins = 0;
- 
     return { name, symbol, wins}
 }
 const playerComputer = (difficulty) =>{
@@ -114,12 +110,12 @@ const playerComputer = (difficulty) =>{
              empty.push(i);
          }
      }
-     return empty;
 
+     return empty;
   }
   const generateID = () =>{
-      return parentID++
 
+      return parentID++
 }
   const nodeFactory= (parentNode,gamestate,depth,index,value,ID) => {
 
@@ -177,13 +173,11 @@ const playerComputer = (difficulty) =>{
         return symbol == 'X'? (-10-depth):(10+depth)
     }
     if(winPattern4.test(stringGrid) && extenderCondition2){
-     
+
         return symbol == 'X'? (-10-depth):(10+depth)
     }
-
     return 0;
   }
-
   const minMax = (currentState) =>{
       let nodeTree = createTree(currentState,'O',-1);
       let depth = getEmpty(currentState).length;
@@ -192,8 +186,6 @@ const playerComputer = (difficulty) =>{
       return indexValue +1;
    
   }
-
- 
   // code for normal difficulty
   const makeChoice = () =>{
        switch(difficulty){
@@ -350,10 +342,8 @@ const placeSymbol= (currentState) =>{
    const impposibleDifficulty = ()=>{
   let currentState = Board.getBoard();
    Board.addSymbol( minMax(currentState));
-   
    }
-   return {makeChoice, prototype}
- 
+   return {makeChoice, name:prototype.name, wins:prototype.wins}
 };
 
 const gameController = (() =>{
@@ -378,20 +368,17 @@ const gameController = (() =>{
            setTimeout( () => arrowUp.setAttribute('href',linkArray[1]),100);
            return
         }
-       
         if(galleryIndex == 2){
             arrowDown.setAttribute('href',linkArray[2]);
             Title.textContent="Normal( AI )";
             setTimeout( () => arrowUp.setAttribute('href',linkArray[0]),100)
-
         }
         if(galleryIndex ==1){
             arrowDown.setAttribute('href',linkArray[1]);
             Title.textContent="Human Player";
             setTimeout( () => arrowUp.setAttribute('href',linkArray[2]),100)
         }
-        galleryIndex = galleryIndex -1;
-          
+        galleryIndex = galleryIndex -1;  
     }
     const goDown = () =>{
         if(galleryIndex == 2){
@@ -405,18 +392,15 @@ const gameController = (() =>{
             arrowUp.setAttribute('href',linkArray[0]);
             Title.textContent="Normal( AI )";
             setTimeout(() => arrowDown.setAttribute('href',linkArray[2]),100)
-
         }
         if(galleryIndex == 1){
             arrowUp.setAttribute('href',linkArray[1]);
             Title.textContent="Unbeatable( AI )";
             setTimeout(() => arrowDown.setAttribute('href',linkArray[0]),100)
-
         }
             galleryIndex = galleryIndex +1;
     }
   
-
     const intializegame= () =>{
         switch(galleryIndex){
             case 0:
@@ -433,7 +417,6 @@ const gameController = (() =>{
         gameContainer.style.filter='blur(0px)';
         Footer.style.filter='blur(0px)';
         gameController.galleryIndex = galleryIndex;
-
     }
     const arrowEvents = (() =>{
         arrowUp.addEventListener('click',goUp);
@@ -442,14 +425,3 @@ const gameController = (() =>{
     })()
     return {galleryIndex,opponent,player1}
 })();
-
-
-//const player1 = player('Bob','X');
-//const player2 = player('Jim','O');
-//const computer = playerComputer('Impossible');
-
-//console.log(computer.minMax(['O',' ','O',' ','X','X','X',' ','O']))
-//console.table(computer.createTree(['O',' ','O',' ','X','X','X',' ','O'],'O',-1));
-//console.log(computer.minMax(['O',' ','O',' ','X','X','X',' ','O']));
-//let nodeTree =computer.createTree(['O','X',' ',' ',' ',' ',' ','X',' '],'O',-1)
-//console.table(nodeTree.filter(node => node.depth == 5));
