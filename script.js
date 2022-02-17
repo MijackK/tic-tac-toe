@@ -127,7 +127,7 @@ const playerComputer = (difficulty) =>{
       let nodeTree = [];
       let empty=getEmpty(currentState);
       let node;  
-
+     
       for( let i=0; i < empty.length; i++){
           let gamestate = currentState.slice();
           gamestate[empty[i]] = symbol
@@ -179,9 +179,17 @@ const playerComputer = (difficulty) =>{
     return 0;
   }
   const minMax = (currentState) =>{
+    if(getEmpty(currentState).length == 8){
+        if(currentState[4] !=' '){
+            return 9;
+        }
+        return 5;
+    }
       let nodeTree = createTree(currentState,'O',-1);
+      console.table(nodeTree.filter(node => node.depth == 8))
       let depth = getEmpty(currentState).length;
       let indexValue = nodeTree.filter(node => node.depth == depth).reduce((a,b)=>a.value > b.value?a:b).index
+      console.log(indexValue);
 
       return indexValue +1;
    
