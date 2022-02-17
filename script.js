@@ -180,8 +180,26 @@ const playerComputer = (difficulty) =>{
   }
   const minMax = (currentState) =>{
     if(getEmpty(currentState).length == 8){
+        let choices;
+        if(currentState[1] !=' '){
+            choices =[1,3,5,8];
+            return choices[Math.floor(Math.random()*4)]
+        }
+        if(currentState[3] !=' '){
+            choices =[1,6,5,7];
+            return choices[Math.floor(Math.random()*4)]
+        }
         if(currentState[4] !=' '){
-            return 9;
+            choices =[1,3,9,7];
+            return choices[Math.floor(Math.random()*4)]
+        }
+        if(currentState[5] !=' '){
+            choices =[3,4,5,9];
+            return choices[Math.floor(Math.random()*4)]
+        }
+        if(currentState[7] !=' '){
+            choices =[2,5,6,8];
+            return choices[Math.floor(Math.random()*4)]
         }
         return 5;
     }
