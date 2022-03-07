@@ -13,8 +13,10 @@ const Board = (() => {
         switch(symbol){
             case 'X':
                 gameController.player1.wins +=1;
+                break;
             case 'O':
-                gameController.opponent.wins +=1
+                gameController.opponent.wins +=1;
+                break;
         }
         alert(symbol=='X'? `${gameController.player1.name} wins, rounds won ${gameController.player1.wins}`:`${gameController.opponent.name} wins, rounds won ${gameController.opponent.wins}`);
         resetGame();
