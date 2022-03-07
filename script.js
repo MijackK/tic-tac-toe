@@ -279,7 +279,7 @@ const playerComputer = (difficulty) =>{
         Board.addSymbol(1);
         return true;
     }
-    if(possibleWin3_3.test(currentState)){
+    if(possibleWin3_3.test(currentState) && currentState.search(possibleWin3_3) == 2){
         console.log( `player is about to win , block ${2}`);
         Board.addSymbol(3);
         return true;
