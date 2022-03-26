@@ -235,7 +235,7 @@ const playerComputer = (difficulty) =>{
     const possibleWin2_2 = /x.{2} .{2}x/i;
     const possibleWin3 = /x.{3}x.{3} /i;
     const possibleWin3_1 = / .{3}x.{3}x/i;
-    const possibleWin3_2 = /.{2}x.x. /i;
+    const possibleWin3_2 = /.{2}x.x. .{2}/i;
     const possibleWin3_3 = /.{2} .x.x/i; // triggers if there is an x in box 6 & 7 and box 4 is empty.
     const extendedWin1 = [0,3,6].includes(currentState.search(possibleWin1));
     const extendedWin1_1 = [2,5,8].includes(currentState.search(possibleWin1_1)+2);
