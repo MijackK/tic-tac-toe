@@ -225,12 +225,11 @@ const playerComputer = (difficulty) => {
       return 5;
     }
     let nodeTree = createTree(currentState, "O", -1);
-    console.table(nodeTree.filter((node) => node.depth == 8));
+
     let depth = getEmpty(currentState).length;
     let indexValue = nodeTree
       .filter((node) => node.depth == depth)
       .reduce((a, b) => (a.value > b.value ? a : b)).index;
-    console.log(indexValue);
 
     return indexValue + 1;
   };
