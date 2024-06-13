@@ -1,68 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tic-Tac-Toe</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fredericka the Great">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Fredericka the Great"
+    />
+    <link
+      rel="stylesheet"
+      href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+      integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p"
+      crossorigin="anonymous"
+    />
     <script src="script.js" defer></script>
-     <link rel="preload" href="board/o1.png" as="image">
-    <link rel="preload" href="board/o2.png" as="image">
-    <link rel="preload" href="board/o3.png" as="image">
-    <link rel="preload" href="board/x1.png" as="image">
-    <link rel="preload" href="board/x2.png" as="image">
-    <link rel="preload" href="board/x3.png" as="image">
-</head>
-<body>
+    <link rel="preload" href="board/o1.png" as="image" />
+    <link rel="preload" href="board/o2.png" as="image" />
+    <link rel="preload" href="board/o3.png" as="image" />
+    <link rel="preload" href="board/x1.png" as="image" />
+    <link rel="preload" href="board/x2.png" as="image" />
+    <link rel="preload" href="board/x3.png" as="image" />
+  </head>
+  <body>
+    <div id="end-wrapper">
+      <div id="end-menu">
+        <h3>Congratulations player, you've won x times</h3>
+
+        <button id="close-end">close</button>
+      </div>
+    </div>
+
     <div class="menu-wrapper">
-        <div class="menu">
-            <div class="title">
-                <h3>Choose your Opponent</h3>
-                <h4 id ="p2-title">Human</h4>
-            </div>
-        
-            <div class="choice">
-        
-               <div class="player2">
-                <a id="arrow-up"href="#p2-img3">
-                    <div class="arrow">^</div >
-                </a>
-                   <div class="choice1">
-                    <img id="p2-img1" src="board/human.png" alt="">
-                    <img id="p2-img2" src="board/normal.png" alt="">
-                    <img id="p2-img3" src="board/T-800.webp" alt="">
-                    </div>
-                 <a  id="arrow-down" href="#p2-img2">
-                     <div class="arrow" style="transform: rotate(180deg);">^</div>
-                 </a>
-               </div>
-            </div>
-            <div class="footer">
-                <div id="start-btn">Start Game</div>
-            </div>
+      <div class="menu">
+        <div class="title">
+          <h3>Choose your Opponent</h3>
+          <h4 id="p2-title">Human</h4>
         </div>
+
+        <div class="choice">
+          <div class="player2">
+            <a id="arrow-up">
+              <div class="arrow">^</div>
+            </a>
+            <div class="choice1">
+              <img id="p2-img1" src="board/human.png" alt="" />
+              <img id="p2-img2" src="board/normal.png" alt="" />
+              <img id="p2-img3" src="board/T-800.webp" alt="" />
+            </div>
+            <a id="arrow-down">
+              <div class="arrow" style="transform: rotate(180deg)">^</div>
+            </a>
+          </div>
+        </div>
+        <div class="footer">
+          <button id="start-btn">Start Game</button>
+        </div>
+      </div>
     </div>
     <div class="game-container">
-        <h1><img src="board/title.png" alt="Tic-Tac-Toe" ></h1>
-        <div class="gameboard">
-            <div id="1"></div>
-            <div id="2"></div>
-            <div id="3"></div>
-            <div id="4"></div>
-            <div id="5"></div>
-            <div id="6"></div>
-            <div id="7"></div>
-            <div id="8"></div>
-            <div id="9"></div>
-        </div>
-       
+      <div>
+        <button id="restart">Restart</button>
+        <button id="change">Change Opponent</button>
+      </div>
+      <h1><img src="board/title.png" alt="Tic-Tac-Toe" /></h1>
+      <div class="gameboard">
+        <div id="1"></div>
+        <div id="2"></div>
+        <div id="3"></div>
+        <div id="4"></div>
+        <div id="5"></div>
+        <div id="6"></div>
+        <div id="7"></div>
+        <div id="8"></div>
+        <div id="9"></div>
+      </div>
     </div>
     <footer id="footer">
-        Made by<a href="https://github.com/MijackK/tic-tac-toe" target="_blank"> <i class="fab fa-github"></i></a>
+      Made by<a href="https://github.com/MijackK/tic-tac-toe" target="_blank">
+        <i class="fab fa-github"></i
+      ></a>
     </footer>
-
-</body>
+  </body>
 </html>
