@@ -72,6 +72,7 @@ img {
   background-color: white;
   border-style: solid;
   border-width: thin;
+  max-width: 90dvw;
 }
 #end-menu > h3 {
   margin-top: 4px;
@@ -89,6 +90,7 @@ img {
   margin-top: 100px;
   padding: 5px;
   align-items: center;
+  max-width: 90dvw;
 }
 .menu img {
   max-width: 200px;
