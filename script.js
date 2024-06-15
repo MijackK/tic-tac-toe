@@ -45,33 +45,25 @@ const Board = (() => {
     const winPattern4 = /.{2}x.x.x|.{2}o.o.o/i;
     const extenderCondition2 = [0].includes(stringGrid.search(winPattern4));
 
+    // no win -1, win 1, draw 0
+
     if (winPattern1.test(stringGrid) && extendedCondition1) {
-      endGame();
-      return;
+      return 1;
     }
     if (winPattern2.test(stringGrid)) {
-      endGame();
-      return;
+      return 1;
     }
     if (winPattern3.test(stringGrid)) {
-      endGame();
-      return;
+      return 1;
     }
     if (winPattern4.test(stringGrid) && extenderCondition2) {
-      endGame();
-      return;
+      return 1;
     }
 
     if (/ /.test(stringGrid) == false) {
-      alert("its a draw");
-      resetGame();
-      symbol = "X";
-      return;
+      return 0;
     }
-    symbol = symbol == "X" ? "O" : "X";
-    if (symbol == "O" && [1, 2].includes(gameController.galleryIndex)) {
-      gameController.opponent.makeChoice();
-    }
+    return -1;
   };
 
   const addSymbol = function (index) {
@@ -87,7 +79,27 @@ const Board = (() => {
        </div> `
         : '<div class="osymbol"></div>';
     gridAssignment[index - 1] = symbol;
-    checkWin();
+    const gameValue = checkWin();
+
+    // no win
+    if (gameValue === -1) {
+      symbol = symbol == "X" ? "O" : "X";
+      if (symbol == "O" && [1, 2].includes(gameController.galleryIndex)) {
+        gameController.opponent.makeChoice();
+      }
+      return;
+    }
+    // draw
+    if (gameValue === 0) {
+      gameController.showEnd("Its a draw");
+      symbol = "X";
+      return;
+    }
+    // win
+    if (gameValue === 1) {
+      endGame();
+      return;
+    }
   };
 
   const addEvent = (() => {
