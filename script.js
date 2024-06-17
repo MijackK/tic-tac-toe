@@ -28,13 +28,16 @@ const Board = (() => {
 
   const resetGame = () => {
     gridAssignment = [" ", " ", " ", " ", " ", " ", " ", " ", " "];
+    let index = 0;
     for (element of gridElements) {
-      element.textContent = "";
+      element.textContent = gridAssignment[index];
+      index += 1;
     }
+    symbol = "X";
   };
-  const checkWin = () => {
-    let stringGrid = gridAssignment.join("");
-    let reversedGrid = gridAssignment;
+  const checkWin = (board = gridAssignment) => {
+    let stringGrid = board.join("");
+    let reversedGrid = board;
     reversedGrid = reversedGrid.slice().reverse().join("");
     const winPattern1 = /xxx|ooo/i;
     const extendedCondition1 =
@@ -67,6 +70,10 @@ const Board = (() => {
   };
 
   const addSymbol = function (index) {
+    if (index < 0 && index > gridAssignment.length) {
+      console.log(`invalid index ${index}`);
+      return;
+    }
     if (gridAssignment[index - 1] != " ") {
       return;
     }
@@ -108,7 +115,7 @@ const Board = (() => {
     }
   })();
 
-  return { addSymbol, getBoard, resetGame };
+  return { addSymbol, getBoard, resetGame, checkWin };
 })();
 
 const player = (name, symbol) => {
@@ -119,7 +126,6 @@ const playerComputer = (difficulty) => {
   let currentPosition;
   let noWin = [];
   const prototype = player("computer", "#");
-  let parentID = 1;
 
   //code for impossible difficulty
   const getEmpty = (gamestate) => {
@@ -132,7 +138,82 @@ const playerComputer = (difficulty) => {
 
     return empty;
   };
-  const generateID = () => {
+  const getValue = (state, symbol, depth) => {
+    let value;
+    switch (Board.checkWin(state)) {
+      case 1:
+        // wins closer to the root weight more, hence why we add/minus by the depth
+        value = symbol === "X" ? state.length - depth : -state.length + depth;
+        break;
+      case 0:
+        value = 0;
+        break;
+      case -1:
+        value = 0;
+        break;
+    }
+
+    return value;
+  };
+  const makeBoard = (board, index, symbol) => {
+    const newState = board.slice();
+    newState[index] = symbol;
+    return newState;
+  };
+
+  const pruningMinMax = (
+    board = Board.getBoard(),
+    isMax = true,
+    alpha = { value: -Infinity, index: -1 },
+    beta = { value: +Infinity, index: -1 },
+    depth = 0
+  ) => {
+    const locations = getEmpty(board);
+    const symbol = isMax ? "O" : "X";
+    const value = getValue(board, symbol, depth);
+    if (locations.length === 0 || value !== 0) {
+      return { value };
+    }
+    let bestValue = isMax ? { value: -Infinity } : { value: +Infinity };
+
+    for (let i = 0; i < locations.length; i += 1) {
+      if (locations[i] === 5 && locations.length === 4) {
+        console.log("hi");
+      }
+
+      const child = pruningMinMax(
+        makeBoard(board, locations[i], symbol),
+        !isMax,
+        alpha,
+        beta,
+        depth + 1
+      );
+
+      if (isMax) {
+        if (child.value > bestValue.value) {
+          bestValue.value = child.value;
+          bestValue.index = locations[i];
+        }
+        alpha = bestValue.value > alpha.value ? bestValue : alpha;
+      } else {
+        if (child.value < bestValue.value) {
+          bestValue.value = child.value;
+          bestValue.index = locations[i];
+        }
+        beta = bestValue.value < beta.value ? bestValue : beta;
+      }
+
+      if (alpha.value >= beta.value) {
+        break;
+      }
+    }
+
+    return bestValue;
+  };
+
+  /*
+    let parentID = 1;
+   const generateID = () => {
     return parentID++;
   };
   const nodeFactory = (parentNode, gamestate, depth, index, value, ID) => {
@@ -244,7 +325,7 @@ const playerComputer = (difficulty) => {
       .reduce((a, b) => (a.value > b.value ? a : b)).index;
 
     return indexValue + 1;
-  };
+  }; */
   // code for normal difficulty
   const makeChoice = () => {
     switch (difficulty) {
@@ -468,9 +549,15 @@ const playerComputer = (difficulty) => {
   };
   const impposibleDifficulty = () => {
     let currentState = Board.getBoard();
-    Board.addSymbol(minMax(currentState));
+    Board.addSymbol(pruningMinMax().index + 1);
+    //Board.addSymbol(minMax(currentState));
   };
-  return { makeChoice, name: prototype.name, wins: prototype.wins };
+  return {
+    makeChoice,
+    name: prototype.name,
+    wins: prototype.wins,
+    pruningMinMax,
+  };
 };
 
 const gameController = (() => {
@@ -559,3 +646,8 @@ const gameController = (() => {
 
   return { galleryIndex, opponent, player1, showOpponents, showEnd };
 })();
+
+const computer = playerComputer("Impossible");
+console.log(
+  computer.pruningMinMax(["X", " ", "X", "O", "O", " ", "X", " ", " "])
+);
