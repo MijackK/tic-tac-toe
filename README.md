@@ -4,7 +4,7 @@
 <h2> Game Modes </h2>
 <ul>
   <li> Player vs Player </li> 
-  <li> Player vs computer(Normal Ai) </li>
+  <li> Player vs computer(regex pattern matching Ai) </li>
   <li> Player vs Computer(Unbeatable min-max Ai) </li>
 </ul>
 
